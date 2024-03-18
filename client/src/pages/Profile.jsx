@@ -133,7 +133,6 @@ export default function Profile() {
         return;
       }
       setUserListings(data);
-      console.log(data);
     } catch (error) {
       setShowListingsError(true);
     }
@@ -146,7 +145,6 @@ export default function Profile() {
       });
       const data = await res.json();
       if (data.success === false) {
-        console.log(data.message);
         return;
       }
       setUserListings((prev) =>
@@ -278,7 +276,9 @@ export default function Profile() {
                 >
                   Delete
                 </button>
-                <button className="text-green-700 uppercase">Edit</button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className="text-green-700 uppercase">Edit</button>
+                </Link>
               </div>
             </div>
           ))}
