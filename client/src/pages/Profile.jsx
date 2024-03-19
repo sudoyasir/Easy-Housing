@@ -205,6 +205,14 @@ export default function Profile() {
           onChange={handleChange}
         />
         <input
+          type="phone"
+          placeholder="Phone (+92123456789)"
+          className="border p-3 rounded-lg"
+          id="phone"
+          defaultValue={currentUser.phone}
+          onChange={handleChange}
+        />
+        <input
           type="password"
           placeholder="Password"
           className="border p-3 rounded-lg"

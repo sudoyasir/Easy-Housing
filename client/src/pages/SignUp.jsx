@@ -60,6 +60,13 @@ export default function SignUp() {
         />
         <input
           className="border p-3 rounded-lg"
+          placeholder="Phone (+92123456789)"
+          id="phone"
+          type="phone"
+          onChange={handleChange}
+        />
+        <input
+          className="border p-3 rounded-lg"
           placeholder="Password"
           id="password"
           type="password"

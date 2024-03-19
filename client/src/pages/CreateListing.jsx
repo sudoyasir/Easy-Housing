@@ -22,8 +22,6 @@ export default function CreateListing() {
     bedrooms: 1,
     bathrooms: 1,
     regularPrice: 100000,
-    discountedPrice: 0,
-    offer: false,
     parking: false,
     furnished: false,
   });
@@ -96,8 +94,7 @@ export default function CreateListing() {
     }
     if (
       e.target.id === "parking" ||
-      e.target.id === "furnished" ||
-      e.target.id === "offer"
+      e.target.id === "furnished"
     ) {
       setFormData({ ...formData, [e.target.id]: e.target.checked });
     }
@@ -116,8 +113,6 @@ export default function CreateListing() {
   const handleSubmit = async (e) => {
     if (formData.imageUrls.length < 1)
       return setError("Please upload at least one image");
-    if (+formData.regularPrice < +formData.discountedPrice)
-      return setError("Discounted price should be less than regular price");
     e.preventDefault();
     try {
       setLoading(true);
@@ -221,16 +216,6 @@ export default function CreateListing() {
               />
               <span>Furnished</span>
             </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="offer"
-                className="w-5"
-                onChange={handleChange}
-                checked={formData.offer}
-              />
-              <span>Offer</span>
-            </div>
           </div>
           <div className="flex flex-wrap gap-6">
             <div className="flex items-center gap-2">
@@ -275,24 +260,6 @@ export default function CreateListing() {
                 <span className="text-xs">(Rs. / month)</span>
               </div>
             </div>
-            {formData.offer && (
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  id="discountedPrice"
-                  min="0"
-                  max="100000000"
-                  required
-                  className="p-3 border border-gray-300 rounded-lg"
-                  onChange={handleChange}
-                  value={formData.discountedPrice}
-                />
-                <div className="flex flex-col items-center">
-                  <p>Discounted Price</p>
-                  <span className="text-xs">(Rs. / month)</span>
-                </div>
-              </div>
-            )}
           </div>
         </div>
         <div className="flex flex-col flex-1 gap-4">

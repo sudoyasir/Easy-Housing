@@ -24,6 +24,7 @@ export default function OAuth() {
         body: JSON.stringify({
           name: result.user.displayName,
           email: result.user.email,
+          phone: "1234567890",
           photo: result.user.photoURL,
         }),
       });
