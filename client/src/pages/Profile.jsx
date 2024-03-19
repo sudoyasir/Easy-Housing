@@ -20,6 +20,7 @@ import {
   signOutUserFailure,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import { FaEraser } from "react-icons/fa";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -177,7 +178,8 @@ export default function Profile() {
         {(currentUser.phone === "" ||
           currentUser.phone === "1234567890" ||
           !currentUser.phone) && (
-          <p className="text-red-700 text-center">
+          <p className="text-red-700 text-center flex justify-center gap-2 items-center">
+            <FaEraser />
             Please update your phone number to receive calls.
           </p>
         )}
