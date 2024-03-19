@@ -15,8 +15,7 @@ export default function Search() {
   });
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
-
-  console.log(listings);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -49,6 +48,9 @@ export default function Search() {
       const searchQuery = urlParams.toString();
       const res = await fetch(`/api/listing/get?${searchQuery}`);
       const data = await res.json();
+      if (data.length > 8) {
+        setShowMore(true);
+      }
       setListings(data);
       setLoading(false);
     };
@@ -88,6 +90,20 @@ export default function Search() {
         order,
       });
     }
+  };
+  const onShowMoreClick = async () => {
+    const numberOfListings = listings.length;
+    const startIndex = numberOfListings;
+    const urlParams = new URLSearchParams(location.search);
+
+    urlParams.set("startIndex", startIndex);
+    const searchQuery = urlParams.toString();
+    const res = await fetch(`/api/listing/get?${searchQuery}`);
+    const data = await res.json();
+    if (data.length < 9) {
+      setShowMore(false);
+    }
+    setListings([...listings, ...data]);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -176,13 +192,13 @@ export default function Search() {
             <label>Sort</label>
             <select
               onChange={handleChange}
-              defaultValue={"created_at_dec"}
+              defaultValue={"created_at_desc"}
               id="sort_order"
               className="border rounded-lg px-7 py-2 bg-white"
             >
               <option value="regularPrice_desc">Price: High to Low</option>
               <option value="regularPrice_asc">Price: Low to High</option>
-              <option value="createdAt_dec">Newest</option>
+              <option value="createdAt_desc">Newest</option>
               <option value="createdAt_asc">Oldest</option>
             </select>
           </div>
@@ -195,23 +211,32 @@ export default function Search() {
         <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
           Listing Results:
         </h1>
-        {
-          <div className="p-7 flex flex-wrap gap-4">
-            {!loading && listings.length === 0 && (
-              <p className="text-xl text-slate-700">No Listing Found!</p>
-            )}
-            {loading && (
-              <p className="text-xl text-slate-700 text-center w-full">
-                Loading...
-              </p>
-            )}
-            {!loading &&
-              listings &&
-              listings.map((listing) => (
-                <ListingItem key={listing._id} listing={listing} />
-              ))}
+
+        <div className="p-7 flex flex-wrap gap-4">
+          {!loading && listings.length === 0 && (
+            <p className="text-xl text-slate-700">No Listing Found!</p>
+          )}
+          {loading && (
+            <p className="text-xl text-slate-700 text-center w-full">
+              Loading...
+            </p>
+          )}
+          {!loading &&
+            listings &&
+            listings.map((listing) => (
+              <ListingItem key={listing._id} listing={listing} />
+            ))}
+        </div>
+        {showMore && (
+          <div className="flex justify-center py-5">
+            <button
+              onClick={onShowMoreClick}
+              className="bg-slate-700 text-white p-2 px-16 rounded-lg uppercase hover:opacity-95"
+            >
+              Show More
+            </button>
           </div>
-        }
+        )}
       </div>
     </div>
   );

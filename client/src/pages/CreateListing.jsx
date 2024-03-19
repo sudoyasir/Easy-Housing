@@ -21,7 +21,7 @@ export default function CreateListing() {
     type: "rent",
     bedrooms: 1,
     bathrooms: 1,
-    regularPrice: 100000,
+    regularPrice: 1000,
     parking: false,
     furnished: false,
   });
@@ -92,10 +92,7 @@ export default function CreateListing() {
     if (e.target.id === "sale" || e.target.id === "rent") {
       setFormData({ ...formData, type: e.target.id });
     }
-    if (
-      e.target.id === "parking" ||
-      e.target.id === "furnished"
-    ) {
+    if (e.target.id === "parking" || e.target.id === "furnished") {
       setFormData({ ...formData, [e.target.id]: e.target.checked });
     }
     if (
@@ -248,7 +245,7 @@ export default function CreateListing() {
               <input
                 type="number"
                 id="regularPrice"
-                min="100000"
+                min="1000"
                 max="100000000"
                 required
                 className="p-3 border border-gray-300 rounded-lg"
@@ -256,8 +253,10 @@ export default function CreateListing() {
                 value={formData.regularPrice}
               />
               <div className="flex flex-col items-center">
-                <p>Regular Price</p>
-                <span className="text-xs">(Rs. / month)</span>
+                <p>Price in PKR</p>
+                <span className="text-xs">
+                  {formData.type === "rent" ? "(Monthly Rent)" : "(Sale Price)"}
+                </span>
               </div>
             </div>
           </div>
