@@ -154,10 +154,12 @@ export default function Profile() {
       console.log(error.message);
     }
   };
+  console.log(currentUser);
 
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center">Profile</h1>
+
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
           onChange={(e) => setFile(e.target.files[0])}
@@ -172,6 +174,13 @@ export default function Profile() {
           alt="Avatar"
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
         />
+        {(currentUser.phone === "" ||
+          currentUser.phone === "1234567890" ||
+          !currentUser.phone) && (
+          <p className="text-red-700 text-center">
+            Please update your phone number to receive calls.
+          </p>
+        )}
         <p className="text-sm self-center">
           {fileUploadError ? (
             <span className="text-red-700 text-center">
