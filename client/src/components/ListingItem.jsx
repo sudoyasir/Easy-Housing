@@ -1,14 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
+import moment from "moment";
+import { AiOutlineClockCircle } from "react-icons/ai";
 
 export default function ListingItem({ listing }) {
   function formatPriceWithCommas(price) {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
+  // Function to calculate the time difference
+  function calculateTimeDifference(updatedAt) {
+    const currentTime = moment();
+    const postTime = moment(updatedAt);
+    const diffInMinutes = currentTime.diff(postTime, "minutes");
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes} minutes ago`;
+    } else if (diffInMinutes < 1440) {
+      return `${Math.floor(diffInMinutes / 60)} hours ago`;
+    } else {
+      return `${Math.floor(diffInMinutes / 1440)} days ago`;
+    }
+  }
+
   return (
-    <div className="bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px] m-2">
+    <div className="bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg sm:w-[330px] md:w-[230px] lg:w-[270px]">
       <Link to={`/listing/${listing._id}`}>
         <img
           src={
@@ -37,16 +53,20 @@ export default function ListingItem({ listing }) {
             {listing.type === "rent" && "/ month"}
           </p>
           <div className="text-slate-700 flex gap-4">
-            <div className="font-bold text:xs">
+            <div className="font-bold text-xs">
               {listing.bedrooms > 1
-                ? `${listing.bedrooms} beds`
-                : `${listing.bedrooms} bed`}
+                ? `${listing.bedrooms} Beds `
+                : `${listing.bedrooms} Bed `}
             </div>
-            <div className="font-bold text:xs">
+            <div className="font-bold text-xs">
               {listing.bathrooms > 1
-                ? `${listing.bathrooms} bathrooms`
-                : `${listing.bathrooms} bathroom`}
+                ? `${listing.bathrooms} Bathrooms `
+                : `${listing.bathrooms} Bathroom `}
             </div>
+          </div>
+          <div className="text-gray-500 text-xs flex items-center gap-1">
+            <AiOutlineClockCircle className="h-4 w-4" />
+            <p>{calculateTimeDifference(listing.updatedAt)}</p>
           </div>
         </div>
       </Link>

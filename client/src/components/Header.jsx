@@ -30,15 +30,17 @@ export default function Header() {
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
-        <h1 className="font-bold text-sm:text-xl flex flex-wrap">
-          <span className="text-slate-500">Easy</span>
-          <span className="text-slate-700">Housing</span>
-        </h1>
+        <Link to="/">
+          <h1 className="font-bold text-sm:text-xl flex flex-wrap">
+            <span className="text-slate-500">Easy</span>
+            <span className="text-slate-700">Housing</span>
+          </h1>
+        </Link>
 
         <form
           onSubmit={handleSumit}
           action=""
-          className="bg-slate-100 p-3 rounded-lg flex items-center"
+          className="bg-slate-100 p-2 rounded-md flex items-center"
         >
           <input
             type="text"
