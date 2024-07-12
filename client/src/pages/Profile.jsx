@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import {
@@ -19,9 +19,10 @@ import {
   signOutUserSuccess,
   signOutUserFailure,
 } from "../redux/user/userSlice";
-import { useDispatch } from "react-redux";
-import { FaEraser } from "react-icons/fa";
+import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import { toast } from "sonner";
+
+//all imports above
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -29,9 +30,8 @@ export default function Profile() {
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
-  const [updateSuccess, setUpdateSuccess] = useState(false);
-  const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
+  const [fetchingListings, setFetchingListings] = useState(false);
 
   const fileRef = useRef(null);
   const dispatch = useDispatch();
@@ -84,12 +84,20 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
+        toast.error("Error", {
+          description: data.message,
+        });
         return;
       }
       dispatch(updateUserSuccess(data));
-      setUpdateSuccess(true);
+      toast.success("Success", {
+        description: "Profile updated successfully",
+      });
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+      toast.error("Error", {
+        description: error.message,
+      });
     }
   };
 
@@ -102,11 +110,20 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
+        toast.error("Error", {
+          description: data.message,
+        });
         return;
       }
       dispatch(deleteUserSuccess(data));
+      toast.success("Success", {
+        description: "User deleted successfully",
+      });
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
+      toast.error("Error", {
+        description: error.message,
+      });
     }
   };
 
@@ -117,26 +134,44 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(signOutUserFailure(data.message));
+        toast.error("Error", {
+          description: data.message,
+        });
         return;
       }
       dispatch(signOutUserSuccess());
+      toast.success("Success", {
+        description: "Signed out successfully",
+      });
     } catch (error) {
-      dispatch(signOutUserFailure(data.message));
+      dispatch(signOutUserFailure(error.message));
+      toast.error("Error", {
+        description: error.message,
+      });
     }
   };
 
   const handleShowListings = async () => {
     try {
-      setShowListingsError(false);
+      setFetchingListings(true);
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
       const data = await res.json();
       if (data.success === false) {
-        setShowListingsError(true);
+        toast.error("Error", {
+          description: data.message,
+        });
         return;
       }
       setUserListings(data);
+      toast.success("Success", {
+        description: `Fetched ${data.length} listings successfully`,
+      });
     } catch (error) {
-      setShowListingsError(true);
+      toast.error("Error", {
+        description: error.message,
+      });
+    } finally {
+      setFetchingListings(false);
     }
   };
 
@@ -146,22 +181,24 @@ export default function Profile() {
         method: "DELETE",
       });
       const data = await res.json();
-      toast.success("Success", {
-        description: `${listingName} deleted successfully`,
-      });
-
-      console.log(data);
       if (data.success === false) {
+        toast.error("Error", {
+          description: data.message,
+        });
         return;
       }
       setUserListings((prev) =>
         prev.filter((listing) => listing._id !== listingId)
       );
+      toast.success("Success", {
+        description: `${listingName} deleted successfully`,
+      });
     } catch (error) {
-      console.log(error.message);
+      toast.error("Error", {
+        description: error.message,
+      });
     }
   };
-  console.log(currentUser);
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -181,14 +218,6 @@ export default function Profile() {
           alt="Avatar"
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
         />
-        {(currentUser.phone === "" ||
-          currentUser.phone === "1234567890" ||
-          !currentUser.phone) && (
-          <p className="text-red-700 text-center flex justify-center gap-2 items-center">
-            <FaEraser />
-            Please update your phone number to receive calls.
-          </p>
-        )}
         <p className="text-sm self-center">
           {fileUploadError ? (
             <span className="text-red-700 text-center">
@@ -212,6 +241,7 @@ export default function Profile() {
           id="username"
           defaultValue={currentUser.username}
           onChange={handleChange}
+          required
         />
         <input
           type="email"
@@ -220,6 +250,7 @@ export default function Profile() {
           id="email"
           defaultValue={currentUser.email}
           onChange={handleChange}
+          required
         />
         <input
           type="phone"
@@ -228,6 +259,7 @@ export default function Profile() {
           id="phone"
           defaultValue={currentUser.phone}
           onChange={handleChange}
+          required
         />
         <input
           type="password"
@@ -238,9 +270,35 @@ export default function Profile() {
         />
         <button
           disabled={loading}
-          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
+          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80 flex justify-center items-center"
         >
-          {loading ? "Loading..." : "Update"}
+          {loading ? (
+            <>
+              <svg
+                className="animate-spin h-5 w-5 mr-3 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8H4z"
+                ></path>
+              </svg>
+              Please wait...
+            </>
+          ) : (
+            "Update"
+          )}
         </button>
         <Link
           to={"/create-listing"}
@@ -260,16 +318,42 @@ export default function Profile() {
           Sign Out
         </span>
       </div>
-      <p className="text-red-700 mt-5">{error ? error : ""}</p>
-      <p className="text-green-700 mt-5">
-        {updateSuccess ? "Profile updated!" : ""}
-      </p>
-      <button onClick={handleShowListings} className="text-green-700 w-full">
-        Show Listings
-      </button>
-      <p className="text-red-700 mt-5">
-        {showListingsError ? "Error fetching listings" : ""}
-      </p>
+      {!userListings.length && (
+        <button
+          onClick={handleShowListings}
+          className="text-green-700 w-full mt-5 flex justify-center items-center"
+          disabled={fetchingListings}
+        >
+          {fetchingListings ? (
+            <>
+              <svg
+                className="animate-spin h-5 w-5 mr-3 text-green-700"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8H4z"
+                ></path>
+              </svg>
+              <span>Fetching Listings...</span>
+            </>
+          ) : (
+            "Show Listings"
+          )}
+        </button>
+      )}
+
       {userListings && userListings.length > 0 && (
         <div className="flex flex-col gap-4">
           <h1 className="text-center mt-7 text-2xl font-semibold">
@@ -291,18 +375,20 @@ export default function Profile() {
                 className="flex-1 font-semibold text-slate-700 hover:underline truncate"
                 to={`/listing/${listing._id}`}
               >
-                <p className="f">{listing.name}</p>
+                <p>{listing.name}</p>
               </Link>
 
-              <div className="flex flex-col items-center">
+              <div className="flex gap-2 items-center">
                 <button
                   onClick={() => handleListingDelete(listing._id, listing.name)}
-                  className="text-red-700 uppercase"
+                  className="text-red-700 hover:opacity-95"
                 >
-                  Delete
+                  <FaTrashAlt />
                 </button>
                 <Link to={`/update-listing/${listing._id}`}>
-                  <button className="text-green-700 uppercase">Edit</button>
+                  <button className="text-green-700 hover:opacity-95">
+                    <FaEdit />
+                  </button>
                 </Link>
               </div>
             </div>
