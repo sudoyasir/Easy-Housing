@@ -10,10 +10,13 @@ import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/UpdateListing";
 import Listing from "./pages/Listing";
 import Search from "./pages/Search";
+import Footer from "./components/Footer";
+import { Toaster } from "sonner";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster position="bottom-right" richColors />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -31,6 +34,7 @@ export default function App() {
           />
         </Route>
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

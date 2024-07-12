@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
+import HomeSlider from "../components/HomeSlider";
+import { FaArrowRight } from "react-icons/fa";
 
 export default function Home() {
   const [saleListings, setSaleListings] = React.useState([]);
@@ -32,25 +34,31 @@ export default function Home() {
   }, []);
   return (
     <div>
-      {/* Hero Section */}
-      <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto">
-        <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
-          Find your next <span className="text-slate-500">perfect</span>
-          <br /> place with ease
-        </h1>
-        <p className="text-gray-400 text-xs sm:text-sm">
-          Search for your next home, apartment, or property with ease. <br />
-          We have a wide range of properties to choose from.
-        </p>
-        <Link
-          to={"/search"}
-          className="text-xs text-blue-800 font-bold hover:underline"
-        >
-          explore now
-        </Link>
-      </div>
-
       {/* Swiper */}
+      <div className="relative">
+        <HomeSlider />
+        <div className="absolute top-0 px-16">
+          <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto">
+            <h1 className="text-gray-200 font-bold text-3xl lg:text-6xl">
+              Find your next <span className="text-slate-500">perfect</span>
+              <br /> place with ease
+            </h1>
+            <p className="text-gray-400 text-xs sm:text-sm">
+              Search for your next home, apartment, or property with ease.{" "}
+              <br />
+              We have a wide range of properties to choose from.
+            </p>
+            <Link
+              to={"/search"}
+              className="text-xs text-blue-800 font-bold hover:bg-slate-800 hover:text-white transition bg-slate-200 w-32 p-3 rounded-full flex justify-center items-center"
+            >
+              Explore Now
+              <FaArrowRight className="ml-2" />
+            </Link>
+          </div>
+        </div>
+      </div>
+      {/* Hero Section */}
 
       {/* Listing of products */}
 
@@ -62,8 +70,9 @@ export default function Home() {
                 Recent places for rent
               </h2>
               <Link
-                className="text-sm text-blue-800 hover:underline"
+                className="text-sm hover:underline text-gray-400"
                 to={"/search?type=rent"}
+                
               >
                 Show more places for rent
               </Link>
@@ -82,7 +91,7 @@ export default function Home() {
                 Recent places for sale
               </h2>
               <Link
-                className="text-sm text-blue-800 hover:underline"
+                className="text-sm text-gray-400 hover:underline"
                 to={"/search?type=sale"}
               >
                 Show more places for sale

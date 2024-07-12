@@ -21,6 +21,7 @@ import {
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { FaEraser } from "react-icons/fa";
+import { toast } from "sonner";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -139,12 +140,17 @@ export default function Profile() {
     }
   };
 
-  const handleListingDelete = async (listingId) => {
+  const handleListingDelete = async (listingId, listingName) => {
     try {
       const res = await fetch(`/api/listing/delete/${listingId}`, {
         method: "DELETE",
       });
       const data = await res.json();
+      toast.success("Success", {
+        description: `${listingName} deleted successfully`,
+      });
+
+      console.log(data);
       if (data.success === false) {
         return;
       }
@@ -290,7 +296,7 @@ export default function Profile() {
 
               <div className="flex flex-col items-center">
                 <button
-                  onClick={() => handleListingDelete(listing._id)}
+                  onClick={() => handleListingDelete(listing._id, listing.name)}
                   className="text-red-700 uppercase"
                 >
                   Delete

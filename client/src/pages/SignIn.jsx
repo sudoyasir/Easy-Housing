@@ -7,6 +7,7 @@ import {
   signInFailure,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import { toast } from "sonner";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -36,12 +37,22 @@ export default function SignIn() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(signInFailure(data.message));
+        toast.error("Error", {
+          description: data.message,
+        });
         return;
       }
       dispatch(signInSuccess(data));
+      toast.success("Success", {
+        description: `${data.username} signed in successfully`,
+      });
+      console.log("data:" + data.message);
       navigate("/");
     } catch (error) {
       dispatch(signInFailure(error.message));
+      toast.error("Error", {
+        description: error.message,
+      });
     }
   };
   return (
@@ -68,7 +79,6 @@ export default function SignIn() {
         >
           {loading ? "Loading..." : "Sign In"}
         </button>
-        <OAuth />
       </form>
       <div className="flex gap-2 mt-5">
         <p>Don't have an account?</p>
@@ -76,7 +86,6 @@ export default function SignIn() {
           <span className="text-blue-700">Sign Up</span>
         </Link>
       </div>
-      {error && <p className="text-red-500 mt-5">{error}</p>}
     </div>
   );
 }
