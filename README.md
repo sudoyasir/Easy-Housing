@@ -7,7 +7,6 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Technologies Used](#technologies-used)
-- [Screenshots](#screenshots)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
@@ -46,11 +45,11 @@ To get a local copy up and running, follow these steps:
    cd client && npm install
 5. Rename `.env.example` to `.env` in root directory and `client` folder and insert your credentials.
 
-6. Start Client by:
+6. **Start Client by**
     ```sh
     npm run dev
     
-7. Start Server by:
+7. **Start Server by**
     ```sh
     npm start
 
