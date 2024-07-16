@@ -1,4 +1,4 @@
-# Real Estate Listing Website
+# Easy Housing (Real Estate Listing Website)
 
 ## Table of Contents
 
@@ -32,11 +32,11 @@ To get a local copy up and running, follow these steps:
 
 1. **Clone the repository**
    ```sh
-   https://github.com/sudoyasir/RealEstate-FYP.git
+   https://github.com/sudoyasir/Easy-Housing.git
    
-1. **Navigate to `RealEstate` folder**
+1. **Navigate to `Easy-Housing` folder**
    ```sh
-   cd RealEstate
+   cd Easy-Housing
 1. **Install `api` dependencies**
    ```sh
    npm install
