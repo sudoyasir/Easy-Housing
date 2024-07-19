@@ -107,4 +107,4 @@ Contributions are what make the open source community such an amazing place to l
 Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ## Contact
-Yasir Nawaz - y451rmahar@gmail.com
+Yasir Nawaz - y451rmahar@gmail.com - [yasirnawaz.me](https://yasirnawaz.me)
